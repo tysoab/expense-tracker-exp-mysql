@@ -1,12 +1,45 @@
 const Expense = require("../model/expense-mod");
-const { numberFormat } = require("../util/helpers");
+const { numberFormat, convertToDeg, calAverage } = require("../util/helpers");
 
 exports.getHome = (req, res, next) => {
-  console.log(req.user.email);
-  res.render("index", {
-    path: "/",
-    pageTitle: "Expense Tracker",
-  });
+  let total = 0;
+  let maximum = 0;
+  let average = 0;
+  Expense.findAll({ where: { userId: +req.user.id } })
+    .then((expenses) => {
+      if (expenses) {
+        total = expenses.reduce((acc, curr) => acc + +curr.amount, 0);
+        const exps = expenses.map((exp) => +exp.amount);
+        maximum = Math.max(...exps);
+        average = exps.reduce((acc, curr) => acc + curr, 0) / exps.length;
+
+        const degTot = convertToDeg(total, [total, maximum, average]);
+        const degMax = convertToDeg(maximum, [total, maximum, average]);
+        const degAve = convertToDeg(average, [total, maximum, average]);
+
+        const aveTot = calAverage(total, [total, maximum, average]);
+        const aveMax = calAverage(maximum, [total, maximum, average]);
+        const aveAvg = calAverage(average, [total, maximum, average]);
+
+        res.render("index", {
+          path: "/",
+          pageTitle: "Expense Tracker",
+          totalExp: total,
+          maximumExp: maximum,
+          averageExp: average,
+          degTot: degTot,
+          degMax: degMax,
+          degAve: degAve,
+          aveTot: aveTot,
+          aveMax: aveMax,
+          aveAvg: aveAvg,
+          nformat: numberFormat,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 // get add expense

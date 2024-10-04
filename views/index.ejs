@@ -91,16 +91,26 @@
                   <div class="card-body p-4 mb-4">
                     <div class="legend row px-5">
                       <div class="col-md-4 mb-3 text-uppercase">
-                        <span class="green"></span> Total - 50%
+                        <span class="green"></span> Total - <%= aveTot %>%
                       </div>
                       <div class="col-md-4 mb-3 text-uppercase">
-                        <span class="orange"></span> Average - 30%
+                        <span class="orange"></span> Average - <%= aveAvg %>%
                       </div>
                       <div class="col-md-4 mb-3 text-uppercase">
-                        <span class="blue"></span> Maximum - 20%
+                        <span class="blue"></span> Maximum - <%= aveMax %>%
                       </div>
                     </div>
-                    <div class="pie-chart mx-auto mt-5"></div>
+                    <div
+                      class="pie-chart mx-auto mt-5"
+                      style="<%= 
+                        `background-image: conic-gradient(
+                          #4caf50 (degTot)deg,
+                          #2196f3 (degAve)deg (degTot + degMax)deg,
+                          #ff9800 0 (degAve)deg
+                        )`
+                        %>
+                      "
+                    ></div>
                   </div>
                 </section>
               </div>
