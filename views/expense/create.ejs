@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../includes/head.ejs') %>
+    <style>
+      .pie-chart {
+        width: 400px;
+        height: 400px;
+        max-width: 100%;
+        max-height: 40%;
+        border-radius: 50%;
+        background-image: conic-gradient(
+          #4caf50 150deg,
+          #2196f3 0 260deg,
+          #ff9800 0
+        );
+      }
+      .legend {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .legend div {
+        display: flex;
+        align-items: center;
+      }
+      .legend span {
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin-right: 5px;
+      }
+      .legend .green {
+        background-color: #4caf50;
+      }
+      .legend .orange {
+        background-color: #ff9800;
+      }
+      .legend .blue {
+        background-color: #2196f3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Page wrapper start -->
+    <div class="page-wrapper">
+      <!-- Main container start -->
+      <div class="main-container">
+        <!-- Sidebar wrapper start -->
+        <nav id="sidebar" class="sidebar-wrapper">
+          <!-- App brand starts -->
+          <div
+            class="app-brand px-3 py-3 d-flex align-items-center justify-content-center"
+          >
+            <%- include('../includes/logo.ejs',{fs: 4}) %>
+          </div>
+
+          <!-- Sidebar profile starts -->
+          <%- include('../includes/sidebar-user-profile.ejs') %>
+
+          <!-- Sidebar menu starts -->
+          <%- include('../includes/sidebar-menu.ejs') %>
+        </nav>
+        <!-- Sidebar wrapper end -->
+
+        <!-- App container starts -->
+        <div class="app-container bg-dark" style="background-color: #10141c">
+          <!-- App header starts -->
+          <%- include('../includes/app-header.ejs') %>
+          <!-- App header ends -->
+
+          <!-- App hero header starts -->
+          <div class="app-hero-header bg-dark">
+            <h5 class="fw-light text-uppercase text-light">
+              <%= expense ? 'update expense' : 'add new expense' %>
+            </h5>
+          </div>
+
+          <!-- App body starts -->
+          <div class="app-body">
+            <!-- Row starts -->
+            <div class="row">
+              <div class="col-xxl-12">
+                <!-- main -->
+                <section
+                  class="card shadow mb-4 bg-dark py-3 px-5"
+                  style="background-color: #161d27"
+                >
+                  <form
+                    action="/expense/<%= expense ? 'update' : 'create' %>"
+                    method="POST"
+                  >
+                    <div class="row p-0">
+                      <div class="col-md-7">
+                        <div class="row d-flex align-items-center m-0 p-0">
+                          <label class="col-md-3 mb-4 text-light">Title:</label>
+                          <div class="col-md-9 mb-4">
+                            <input
+                              type="text"
+                              name="title"
+                              value="<%= expense ? expense.title : '' %>"
+                              required
+                              class="form-control bg-secondary border-secondary"
+                            />
+                          </div>
+                        </div>
+                        <div class="row d-flex align-items-center m-0 p-0">
+                          <label class="col-md-3 mb-4 text-light"
+                            >Merchant:</label
+                          >
+                          <div class="col-md-9 mb-4">
+                            <input
+                              type="text"
+                              name="merchant"
+                              value="<%= expense ? expense.merchant : '' %>"
+                              required
+                              class="form-control bg-secondary border-secondary"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="row d-flex align-items-center m-0 p-0">
+                          <label class="col-md-3 mb-4 text-light"
+                            >Amount:</label
+                          >
+                          <div class="col-md-9 mb-4">
+                            <input
+                              type="number"
+                              name="amount"
+                              value="<%= expense ? expense.amount : '' %>"
+                              required
+                              class="form-control bg-secondary border-secondary"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="row d-flex align-items-center m-0 p-0">
+                          <label
+                            class="col-md-3 mb-4 text-light align-self-start"
+                            >Description:</label
+                          >
+                          <div class="col-md-9 mb-4">
+                            <textarea
+                              rows="5"
+                              name="description"
+                              required
+                              value="<%= expense ? expense.description : '' %>"
+                              class="form-control bg-secondary border-secondary"
+                            ></textarea>
+                          </div>
+                        </div>
+                        <div class="row d-flex align-items-center m-0 p-0">
+                          <label class="col-md-3 mb-4 text-light"
+                            >Category:</label
+                          >
+                          <div class="col-md-9 mb-4">
+                            <select
+                              name="category"
+                              required
+                              class="form-control bg-secondary border-secondary"
+                            >
+                              <% if(expense){ %>
+                              <option selected><%= expense.category %></option>
+                              <% } %>
+
+                              <option></option>
+                              <option>Consumable</option>
+                              <option>Non Consumable</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-5 mb-4 p-5">
+                        <label
+                          for="reciept"
+                          class="card p-2 d-flex align-items-center border justify-content-center flex-column bg-transparent w-100 h-100"
+                        >
+                          <i class="bi bi-plus fs-1 text-light"></i>
+
+                          <small for="reciept" class="text-light fs-6 d-block"
+                            >Upload an invoice</small
+                          >
+                        </label>
+                        <input
+                          type="file"
+                          name="file"
+                          id="reciept"
+                          class="d-none"
+                        />
+                      </div>
+                      <div
+                        class="row d-flex align-items-center justify-content-end mt-3 m-0 p-0"
+                      >
+                        <div
+                          class="col-md-12 col-xl-3 col-xxl-12 col-sm-12mb-4 text-end"
+                        >
+                          <% if(expense){ %>
+                          <input
+                            type="hidden"
+                            name="id"
+                            value="<%= expense.id %>"
+                          />
+                          <% } %>
+                          <button
+                            class="btn border text-uppercase btn-outline-light w-100"
+                          >
+                            Add Expense
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+            <!-- Row end -->
+          </div>
+          <!-- App body ends -->
+
+          <!-- App footer start -->
+          <div class="app-footer">
+            <span class="text-light"> copyright &copy; 2024</span>
+          </div>
+          <!-- App footer end -->
+        </div>
+        <!-- App container ends -->
+      </div>
+      <!-- Main container end -->
+    </div>
+    <!-- Page wrapper end -->
+    <%- include('../includes/end.ejs') %>
+  </body>
+</html>

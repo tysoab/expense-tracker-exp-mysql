@@ -1,0 +1,34 @@
+<div class="sidebarMenuScroll">
+  <ul class="sidebar-menu">
+    <li class="<%= path === '/' ? 'active current-page' : '' %>">
+      <a href="/">
+        <i class="bi bi-pie-chart"></i>
+        <span class="menu-text">Dashboard</span>
+      </a>
+    </li>
+
+    <li
+      class="treeview <%= path === '/expense' ? 'active current-page' : '' %>"
+    >
+      <a href="#!">
+        <i class="bi bi-box"></i>
+        <span class="menu-text">Expense</span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+          <a href="/expense/create">New Expense</a>
+        </li>
+        <li>
+          <a href="/expense/">Expenses</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="<%= path === '/profile' ? 'active current-page' : '' %>">
+      <a href="">
+        <i class="bi bi-person-square"></i>
+        <span class="menu-text">Profile</span>
+      </a>
+    </li>
+  </ul>
+</div>

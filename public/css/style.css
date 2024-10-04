@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Nerko+One&family=Roboto+Slab:wght@100..900&display=swap");
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Roboto Slab", serif !important;
+}
+
+/* login container */
+.login-container {
+  background-image: url("/images/bg-exp.jpg");
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.login-container input::placeholder {
+  color: #dbd3d3;
+}
+
+.login-container textarea {
+  scroll-padding-block: 10px;
+}
+
+/* expenses */
+
+.expenses tbody tr:nth-child(odd) {
+  background-color: #212529 !important;
+  font-size: 0.9rem;
+}
+
+.expenses tbody tr:nth-child(even) {
+  font-size: 0.9rem;
+  background-color: #10141c !important;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../includes/head.ejs') %>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="container">
+        <h1 class="display-4 mb-5" style="color: #2395d7">T' Expense</h1>
+
+        <% if(errorMessage){ %>
+        <div class="error bg-danger text-light px-4 py-2 fs-6 mb-5 rounded">
+          <%= errorMessage %>
+        </div>
+        <% } %>
+
+        <form
+          action="/account/login"
+          method="POST"
+          class="row g-3 needs-validatio d-flex align-items-center justify-content-center"
+          novalidate
+        >
+          <div
+            class="col-md-7 d-flex align-items-center justify-content-center"
+          >
+            <input
+              type="email"
+              name="email"
+              value="<%= oldInput.email || '' %>"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.find(e => e.path === 'email') ? 'border border-danger' : '' %>"
+              placeholder="Email e.g example@gmail.com"
+              required
+            />
+          </div>
+          <div class="col-md-7 align-items-center justify-content-center">
+            <input
+              type="password"
+              name="password"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.find(e => e.path === 'email') ? 'border border-danger' : '' %>"
+              placeholder="Password"
+              required
+            />
+          </div>
+
+          <div class="col-md-7 align-items-center justify-content-center">
+            <button class="btn w-100 btn-primary" type="submit">Login</button>
+          </div>
+
+          <div
+            class="col-md-7 d-flex align-items-center justify-content-center gap-2 text-light mt-3"
+          >
+            Don't have an account?
+            <a href="/account/create" class="nav-link text-info"
+              >Create Account</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+    <%- include('../includes/end.ejs') %>
+  </body>
+</html>
