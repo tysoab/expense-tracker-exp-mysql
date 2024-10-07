@@ -7,6 +7,13 @@
     <div class="login-container">
       <div class="container">
         <h1 class="display-4 mb-5" style="color: #2395d7">T' Expense</h1>
+
+        <% if(errorMessage){ %>
+        <div class="error bg-danger text-light px-4 py-2 fs-6 mb-5 rounded">
+          <%= errorMessage %>
+        </div>
+        <% } %>
+
         <form
           action="/account/create"
           method="POST"
@@ -19,7 +26,8 @@
             <input
               type="text"
               name="firstName"
-              class="form-control bg-secondary text-light placeholder-light"
+              value="<%= oldInput.firstName || '' %>"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.find(e => e.path === 'firstName') ? 'border border-danger' : '' %>"
               placeholder="Enter your First Name:"
               required
             />
@@ -30,7 +38,8 @@
             <input
               type="text"
               name="lastName"
-              class="form-control bg-secondary text-light placeholder-light"
+              value="<%= oldInput.lastName || '' %>"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.find(e => e.path === 'lastName') ? 'border border-danger' : '' %>"
               placeholder="Enter your Last Name:"
               required
             />
@@ -41,7 +50,8 @@
             <input
               type="email"
               name="email"
-              class="form-control bg-secondary text-light placeholder-light"
+              value="<%= oldInput.email || '' %>"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.find(e => e.path === 'email') ? 'border border-danger' : '' %>"
               placeholder="Email e.g example@gmail.com"
               required
             />
@@ -50,7 +60,7 @@
             <input
               type="password"
               name="password"
-              class="form-control bg-secondary text-light placeholder-light"
+              class="form-control bg-secondary text-light placeholder-light <%= validationErrors.length ? 'border border-danger' : '' %>"
               placeholder="Password"
               required
             />

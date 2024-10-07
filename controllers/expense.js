@@ -10,16 +10,28 @@ exports.getHome = (req, res, next) => {
       if (expenses) {
         total = expenses.reduce((acc, curr) => acc + +curr.amount, 0);
         const exps = expenses.map((exp) => +exp.amount);
-        maximum = Math.max(...exps);
-        average = exps.reduce((acc, curr) => acc + curr, 0) / exps.length;
+        maximum = exps.length ? Math.max(...exps) : 0;
+        average = exps.length
+          ? exps.reduce((acc, curr) => acc + curr, 0) / exps.length
+          : 0;
 
-        const degTot = convertToDeg(total, [total, maximum, average]);
-        const degMax = convertToDeg(maximum, [total, maximum, average]);
-        const degAve = convertToDeg(average, [total, maximum, average]);
+        const degTot = total
+          ? convertToDeg(total, [total, maximum, average])
+          : 0;
+        const degMax = maximum
+          ? convertToDeg(maximum, [total, maximum, average])
+          : 0;
+        const degAve = average
+          ? convertToDeg(average, [total, maximum, average])
+          : 0;
 
-        const aveTot = calAverage(total, [total, maximum, average]);
-        const aveMax = calAverage(maximum, [total, maximum, average]);
-        const aveAvg = calAverage(average, [total, maximum, average]);
+        const aveTot = total ? calAverage(total, [total, maximum, average]) : 0;
+        const aveMax = maximum
+          ? calAverage(maximum, [total, maximum, average])
+          : 0;
+        const aveAvg = average
+          ? calAverage(average, [total, maximum, average])
+          : 0;
 
         res.render("index", {
           path: "/",
@@ -107,12 +119,24 @@ exports.postUpdateExpense = (req, res, next) => {
 exports.getExpenses = (req, res, next) => {
   Expense.findAll({ where: { userId: +req.user.id }, order: [["id", "DESC"]] })
     .then((expenses) => {
-      res.render("expense/index", {
-        path: "/expense",
-        pageTitle: "All Expense",
-        expenses: expenses,
-        nformat: numberFormat,
-      });
+      if (expenses) {
+        total = expenses.reduce((acc, curr) => acc + +curr.amount, 0);
+        const exps = expenses.map((exp) => +exp.amount);
+        maximum = exps.length ? Math.max(...exps) : 0;
+        average = exps.length
+          ? exps.reduce((acc, curr) => acc + curr, 0) / exps.length
+          : 0;
+
+        res.render("expense/index", {
+          path: "/expense",
+          pageTitle: "All Expense",
+          totalExp: total,
+          maximumExp: maximum,
+          averageExp: average,
+          expenses: expenses,
+          nformat: numberFormat,
+        });
+      }
     })
     .catch((err) => {
       console.log(err);

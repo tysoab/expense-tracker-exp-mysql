@@ -67,14 +67,37 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.getCreate = (req, res, next) => {
+  let message = req.flash("error");
+
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+
   res.render("user/create", {
     path: "/account/create",
     pageTitle: "Create Account",
+    errorMessage: message,
+    oldInput: { email: "" },
+    validationErrors: [],
   });
 };
 
 exports.postCreate = (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("user/create", {
+      path: "/account/create",
+      pageTitle: "Create Account",
+      errorMessage: errors.array()[0].msg,
+      oldInput: { email: email, firstName: firstName, lastName: lastName },
+      validationErrors: errors.array(),
+    });
+  }
 
   bcrypt
     .hash(password, 12)
