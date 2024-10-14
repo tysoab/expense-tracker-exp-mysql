@@ -87,9 +87,18 @@
                   class="card shadow mb-4 bg-dark py-3 px-5"
                   style="background-color: #161d27"
                 >
+                  <% if(errorMessage){ %>
+                  <div
+                    class="error bg-danger text-light px-4 py-2 fs-6 mb-5 rounded"
+                  >
+                    <%= errorMessage %>
+                  </div>
+                  <% } %>
                   <form
                     action="/expense/<%= expense ? 'update' : 'create' %>"
                     method="POST"
+                    enctype="multipart/form-data"
+                    novalidate
                   >
                     <div class="row p-0">
                       <div class="col-md-7">
@@ -99,7 +108,7 @@
                             <input
                               type="text"
                               name="title"
-                              value="<%= expense ? expense.title : '' %>"
+                              value="<%= oldInput.title || '' %>"
                               required
                               class="form-control bg-secondary border-secondary"
                             />
@@ -113,7 +122,7 @@
                             <input
                               type="text"
                               name="merchant"
-                              value="<%= expense ? expense.merchant : '' %>"
+                              value="<%= oldInput.merchant || '' %>"
                               required
                               class="form-control bg-secondary border-secondary"
                             />
@@ -128,7 +137,7 @@
                             <input
                               type="number"
                               name="amount"
-                              value="<%= expense ? expense.amount : '' %>"
+                              value="<%= oldInput.amount || '' %>"
                               required
                               class="form-control bg-secondary border-secondary"
                             />
@@ -145,9 +154,10 @@
                               rows="5"
                               name="description"
                               required
-                              value="<%= expense ? expense.description : '' %>"
                               class="form-control bg-secondary border-secondary"
-                            ></textarea>
+                            >
+<%= oldInput.description || '' %></textarea
+                            >
                           </div>
                         </div>
                         <div class="row d-flex align-items-center m-0 p-0">
@@ -160,13 +170,17 @@
                               required
                               class="form-control bg-secondary border-secondary"
                             >
-                              <% if(expense){ %>
-                              <option selected><%= expense.category %></option>
+                              <% if(oldInput.category){ %>
+                              <option value="<%= oldInput.category %>" selected>
+                                <%= oldInput.category %>
+                              </option>
                               <% } %>
 
                               <option></option>
-                              <option>Consumable</option>
-                              <option>Non Consumable</option>
+                              <option value="Consumable">Consumable</option>
+                              <option value="Non Consumable">
+                                Non Consumable
+                              </option>
                             </select>
                           </div>
                         </div>
@@ -185,7 +199,7 @@
                         </label>
                         <input
                           type="file"
-                          name="file"
+                          name="image"
                           id="reciept"
                           class="d-none"
                         />
@@ -202,12 +216,26 @@
                             name="id"
                             value="<%= expense.id %>"
                           />
-                          <% } %>
+                          <script>
+                            window.history.pushState(
+                              "",
+                              "",
+                              "/expense/create?id=<%= expense.id %>&edit=true"
+                            );
+                          </script>
+                          <button
+                            class="btn border text-uppercase btn-outline-light w-100"
+                          >
+                            Update Expense
+                          </button>
+                          <% }else{ %>
+
                           <button
                             class="btn border text-uppercase btn-outline-light w-100"
                           >
                             Add Expense
                           </button>
+                          <% } %>
                         </div>
                       </div>
                     </div>

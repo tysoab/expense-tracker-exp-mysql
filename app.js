@@ -14,9 +14,34 @@ const UserMod = require("./model/user-mod");
 const session = require("express-session");
 const flash = require("connect-flash");
 const { where } = require("sequelize");
-
+// file upload
+const multer = require("multer");
 // create app
 const app = express();
+
+// file storage
+const todayDate = Date.now();
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "invoices");
+  },
+  filename: (req, file, cb) => {
+    cb(null, todayDate + "-" + file.originalname);
+  },
+});
+
+// file filter
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype === "image/png" ||
+//     file.mimetype === "image/jpg" ||
+//     file.mimetype === "image/jpeg"
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
 
 // set template engine
 app.set("view engine", "ejs");
@@ -24,7 +49,9 @@ app.set("views", "views");
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ storage: fileStorage }).single("image"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/invoices", express.static(path.join(__dirname, "invoices")));
 
 // session
 app.use(
@@ -46,7 +73,6 @@ app.use((req, res, next) => {
   }
   UserMod.findOne({ where: { email: req.session.user.email } })
     .then((user) => {
-      console.log(user);
       req.user = user;
       next();
     })
@@ -75,7 +101,6 @@ UserMod.hasMany(ExpenseMod);
 sequelize
   .sync()
   .then((result) => {
-    console.log(result);
     // start the app
     app.listen(3003);
   })
