@@ -130,29 +130,34 @@ exports.postAddExpense = (req, res, next) => {
     });
   }
 
-  const isValidImage =
-    (image && image.mimetype === "image/jpeg") ||
-    image.mimetype === "image/jpg" ||
-    image.mimetype === "image/png"
-      ? true
-      : false;
+  // const isValidImage =
+  //   (image && image.mimetype === "image/jpeg") ||
+  //   image.mimetype === "image/jpg" ||
+  //   image.mimetype === "image/png"
+  //     ? true
+  //     : false;
 
-  if (!isValidImage) {
-    return res.status(422).render("expense/create", {
-      path: "/expense",
-      pageTitle: "New Expense",
-      expense: null,
-      errorMessage:
-        "Attachment not supported, only jpg, jpeg, png files are supported",
-      oldInput: {
-        title: title,
-        amount: amount,
-        merchant: merchant,
-        description: description,
-        category: category,
-      },
-      validationErrors: [],
-    });
+  if (image) {
+    if (
+      image.mimetype === "image/jpeg" ||
+      image.mimetype === "image/jpg" ||
+      image.mimetype === "image/png"
+    )
+      return res.status(422).render("expense/create", {
+        path: "/expense",
+        pageTitle: "New Expense",
+        expense: null,
+        errorMessage:
+          "Attachment not supported, only jpg, jpeg, png files are supported",
+        oldInput: {
+          title: title,
+          amount: amount,
+          merchant: merchant,
+          description: description,
+          category: category,
+        },
+        validationErrors: [],
+      });
   }
 
   const imageUrl = image ? image.path : "";

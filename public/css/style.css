@@ -46,3 +46,17 @@ body {
   font-size: 0.9rem;
   background-color: #10141c !important;
 }
+
+/* lg-table */
+.lg-table {
+  display: none;
+}
+@media (max-width: 768px) {
+  .md-table {
+    display: none;
+  }
+
+  .lg-table {
+    display: block;
+  }
+}

@@ -85,7 +85,7 @@
                 <!-- main -->
                 <% if(expenses.length){ let index = 1 %>
                 <table
-                  class="shadow mb-4 w-100 border border-primary border-2"
+                  class="shadow mb-4 w-100 border border-primary border-2 md-table"
                   style="background-color: #10141c"
                 >
                   <thead class="">
@@ -172,6 +172,85 @@
                     <% index++ } %>
                   </tbody>
                 </table>
+
+                <div class="lg-table">
+                  <% for (expense of expenses){ %>
+                  <div class="row border-bottom border-light mb-3 rounded">
+                    <div
+                      class="col-md-12 mb-3 text-uppercase text-light-emphasis"
+                    >
+                      Details
+                    </div>
+                    <h2 class="col-md-12 mb-3">
+                      <small
+                        class="d-block text-warning-emphasis"
+                        style="font-size: 0.8rem"
+                      >
+                        <%= new
+                        Date(expense.createdAt).toLocaleDateString('en-us') %>
+                      </small>
+                      <span class="text-light"> <%= expense.title %> </span>
+                    </h2>
+
+                    <div
+                      class="col-md-12 mb-3 text-uppercase text-light-emphasis"
+                    >
+                      merchant
+                    </div>
+                    <h2 class="col-md-12 mb-3 text-light">
+                      <%= expense.merchant %>
+                    </h2>
+
+                    <div
+                      class="col-md-12 mb-3 text-uppercase text-light-emphasis"
+                    >
+                      Amount
+                    </div>
+                    <h2 class="col-md-12 mb-3 text-light">
+                      <%= nformat(expense.amount) %>
+                    </h2>
+                    <div
+                      class="col-md-12 mb-3 text-uppercase text-light-emphasis"
+                    >
+                      Category
+                    </div>
+                    <h2 class="col-md-12 mb-3 text-light">
+                      <%= expense.category %>
+                    </h2>
+
+                    <div
+                      class="col-md-12 mb-3 d-flex align-items-center gap-3 justify-content-end mt-2"
+                    >
+                      <a
+                        href="/expense/details/<%= expense.id %>"
+                        class="btn btn-outline-primary px-3 py-1.5"
+                      >
+                        <i class="bi bi-eye-fill"></i>
+                      </a>
+
+                      <form
+                        action="/expense/delete-expense"
+                        method="POST"
+                        class="delete-expense"
+                      >
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="<%= expense.id %>"
+                        />
+                        <button
+                          class="btn btn-outline-danger px-3"
+                          type="submit"
+                          name="_delete"
+                        >
+                          <i class="bi bi-trash-fill"></i>
+                        </button>
+                      </form>
+                    </div>
+                    <!--  -->
+                  </div>
+                  <%}%>
+                </div>
                 <% }else{ %>
                 <h2 class="text-warning">No Expenses!</h2>
                 <h6 class="text-warning-emphasis">
