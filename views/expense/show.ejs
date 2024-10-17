@@ -134,6 +134,7 @@
                     </h6>
                     <pre><%= expense.description %></pre>
                   </div>
+                  <% if(expense.invoice){ %>
                   <div
                     class="col-md-12 p-3 mb-3 text-light border-bottom text-center"
                   >
@@ -144,6 +145,7 @@
                       style="width: 250px; height: 250px"
                     />
                   </div>
+                  <% } %>
                 </div>
                 <% }else{ %>
                 <h4 class="text-light">No Expense...</h4>
